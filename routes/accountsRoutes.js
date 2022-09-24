@@ -5,7 +5,17 @@ const User = require("../models/Users");
 
 router.get("/", async (_, res) => {
 	try {
-		const result = await User.getUsers();
+		const result = await User.getAllUsers();
+		res.status(200).json(result);
+	} catch (err) {
+		res.status(400).json("Wtf! Error " + err);
+	}
+});
+
+router.get("/:username", async (req, res) => {
+	try {
+		const username = req.params.username;
+		const result = await User.getOneUser(username);
 		res.status(200).json(result);
 	} catch (err) {
 		res.status(400).json("Wtf! Error " + err);

@@ -1,8 +1,12 @@
 const db = require("./database");
 
 class User {
-	static getUsers() {
+	static getAllUsers() {
 		return db.any("select * from users");
+	}
+
+	static getOneUser(username) {
+		return db.oneOrNone("select * from users where username = $1", username);
 	}
 
 	static async insertUser(username, password) {
