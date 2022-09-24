@@ -6,14 +6,15 @@ class User {
 	}
 
 	static async insertUser(username, password) {
-		const existingUsername = this.findUser(username);
-		if (!existingUsername) {
+		const userExists = await this.findUser(username);
+
+		if (!userExists) {
 			return db.none("insert into users(username, password) values($1, $2)", [
 				username,
 				password,
 			]);
 		} else {
-			return Promise.reject("Username already exists");
+			throw new Error("Username already exist!");
 		}
 	}
 	static deleteAllRows() {
@@ -21,26 +22,39 @@ class User {
 	}
 
 	static async findUser(username) {
-		const existingUsername = await db.any(
+		const result = await db.oneOrNone(
 			"select username from users where username = $1",
 			username,
 		);
-		return existingUsername;
+
+		console.log("🚀 -> file: Users.js -> line 29 -> result", result);
+
+		return result;
 	}
 
 	static async checkPassword(username, password) {
-		const existingUsername = this.findUser(username);
-		if (!existingUsername) {
-			return Promise.reject("this user doesn't exist");
+		const isUserExist = await this.findUser(username);
+		if (!isUserExist) {
+			console.log("User.js:37 -> user doesnt exist");
+			throw new Error("this user doesn't exist");
 		}
 		const { password: storedPassword } = await db.oneOrNone(
 			"select password from users where username = $1",
 			username,
 		);
-		console.log("🚀 -> storedPassword", storedPassword);
-		console.log("🚀 -> password", password);
 		if (storedPassword == password) return Promise.resolve("login successfully");
-		else return Promise.reject("wrong password");
+		else throw new Error("wrong password");
+	}
+
+	static updatePassword(username, newPassword) {
+		return db.none("update users set password = $1 where username = $2", [
+			newPassword,
+			username,
+		]);
+	}
+
+	static deleteUser(username) {
+		return db.none("delete from users where username = $1", username);
 	}
 }
 

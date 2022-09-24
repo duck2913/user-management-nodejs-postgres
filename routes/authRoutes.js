@@ -8,31 +8,22 @@ router.get("/", (_, res) => {
 	res.json("this is auth route");
 });
 
-router.get("/register", async (_, res) => {
-	try {
-		const result = await User.getUsers();
-		res.json(result);
-	} catch (err) {
-		next(err);
-	}
-});
-
 router.post("/register", async (req, res, next) => {
 	try {
 		const username = req.body.username;
 		const password = req.body.password;
-		const result = await User.insertUser(username, password);
+		await User.insertUser(username, password);
 		res.json("insert successfully");
 	} catch (err) {
 		next(err);
 	}
 });
 
-router.get("/login", async (req, res, next) => {
+router.get("/login", async (_, res) => {
 	res.json("this is login page");
 });
 
-router.post("/login", async (req, res, next) => {
+router.post("/login", async (req, res) => {
 	try {
 		const username = req.body.username;
 		const password = req.body.password;

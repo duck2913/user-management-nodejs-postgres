@@ -7,8 +7,10 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 const authRouter = require("./routes/authRoutes");
+const accountsRouter = require("./routes/accountsRoutes");
 
 app.use("/auth", authRouter);
+app.use("/accounts", accountsRouter);
 
 app.use((err, req, res, next) => {
 	res.status(500).json(`This is not good! ${err.toString().toUpperCase()}`);
