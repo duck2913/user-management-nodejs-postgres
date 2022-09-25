@@ -1,57 +1,16 @@
 const express = require("express");
 const router = express.Router();
 
-const User = require("../models/Users");
+const accountsController = require("../controllers/accountsController");
 
-router.get("/", async (_, res) => {
-	try {
-		const result = await User.getAllUsers();
-		res.status(200).json(result);
-	} catch (err) {
-		res.status(400).json("Wtf! Error " + err);
-	}
-});
+router.get("/", accountsController.getUsers);
 
-router.get("/:username", async (req, res) => {
-	try {
-		const username = req.params.username;
-		const result = await User.getOneUser(username);
-		res.status(200).json(result);
-	} catch (err) {
-		res.status(400).json("Wtf! Error " + err);
-	}
-});
+router.get("/:username", accountsController.getOneUser);
 
-router.post("/", async (req, res) => {
-	try {
-		const username = req.body.username;
-		const password = req.body.password;
-		await User.insertUser(username, password);
-		res.status(200).json("insert successfully");
-	} catch (err) {
-		res.status(400).json("Fail during insert: " + err);
-	}
-});
+router.post("/", accountsController.createUser);
 
-router.put("/:username", async (req, res) => {
-	try {
-		const username = req.params.username;
-		const newPassword = req.body.newPassword;
-		await User.updatePassword(username, newPassword);
-		res.status(200).json("update password successfully");
-	} catch (err) {
-		res.status(500).json(`Fail during update: ${err}`);
-	}
-});
+router.put("/:username", accountsController.updateUser);
 
-router.delete("/:username", async (req, res) => {
-	try {
-		const username = req.params.username;
-		await User.deleteUser(username);
-		res.status(200).json("delete successfully");
-	} catch (err) {
-		res.status(400).json(`Fail during delete: ${err}`);
-	}
-});
+router.delete("/:username", accountsController.deleteUser);
 
 module.exports = router;

@@ -12,7 +12,7 @@ const accountsRouter = require("./routes/accountsRoutes");
 app.use("/auth", authRouter);
 app.use("/accounts", accountsRouter);
 
-app.use((err, req, res, next) => {
+app.use((err, _, res, __) => {
 	res.status(500).json(`This is not good! ${err.toString().toUpperCase()}`);
 });
 app.listen(3000);
