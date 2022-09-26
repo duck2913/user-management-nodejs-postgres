@@ -5,6 +5,13 @@ class User {
 		return db.any("select * from users");
 	}
 
+	static getUsersWithPagination(page, PAGE_SIZE) {
+		return db.any("select * from users offset $1 limit $2", [
+			(page - 1) * PAGE_SIZE,
+			PAGE_SIZE,
+		]);
+	}
+
 	static getOneUser(username) {
 		return db.oneOrNone("select * from users where username = $1", username);
 	}

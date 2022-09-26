@@ -1,8 +1,15 @@
 const User = require("../models/Users");
 
-exports.getUsers = async (_, res) => {
+exports.getUsers = async (req, res) => {
 	try {
-		const result = await User.getAllUsers();
+		const page = req.query.page;
+		const PAGE_SIZE = 2;
+		let result;
+		if (!page) {
+			result = await User.getAllUsers();
+		} else {
+			result = await User.getUsersWithPagination(page, PAGE_SIZE);
+		}
 		res.status(200).json(result);
 	} catch (err) {
 		res.status(400).json("Wtf! error during GET " + err);

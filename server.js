@@ -1,3 +1,4 @@
+console.clear();
 const express = require("express");
 const bodyParser = require("body-parser");
 
@@ -15,4 +16,6 @@ app.use("/accounts", accountsRouter);
 app.use((err, _, res, __) => {
 	res.status(500).json(`This is not good! ${err.toString().toUpperCase()}`);
 });
-app.listen(3000);
+app.listen(3000, () => {
+	console.log("--- server is connected ---");
+});
