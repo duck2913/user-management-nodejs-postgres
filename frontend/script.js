@@ -1,7 +1,7 @@
 const nameEl = document.querySelector(".username");
 const passwordEl = document.querySelector(".password");
 
-function handleSubmit() {
+async function handleSubmit() {
 	const username = nameEl.value;
 	const password = passwordEl.value;
 
@@ -13,8 +13,7 @@ function handleSubmit() {
 		},
 	};
 
-	fetch("http://localhost:3000/auth/login", options)
-		.then((response) => response.json())
-		.then((response) => console.log(response))
-		.catch((err) => console.error(err));
+	const res = await fetch("http://localhost:3000/auth/login", options);
+	const response = await res.json();
+	console.log("🚀 -> file: script.js -> line 19 -> response", response);
 }
