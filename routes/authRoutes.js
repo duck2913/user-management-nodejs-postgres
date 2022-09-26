@@ -1,4 +1,5 @@
 const express = require("express");
+const path = require("path");
 const router = express.Router();
 
 const db = require("../models/database");
@@ -20,7 +21,7 @@ router.post("/register", async (req, res, next) => {
 });
 
 router.get("/login", async (_, res) => {
-	res.json("this is login page");
+	res.sendFile(path.join(__dirname, "..", "frontend", "/index.html"));
 });
 
 router.post("/login", async (req, res) => {
@@ -31,7 +32,7 @@ router.post("/login", async (req, res) => {
 		const status = await User.checkPassword(username, password);
 		res.json(status);
 	} catch (err) {
-		res.status(400).json("Wrong password");
+		res.status(400).json("Oh ohh! Wrong password");
 	}
 });
 
