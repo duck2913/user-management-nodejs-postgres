@@ -30,11 +30,13 @@ router.post("/login", async (req, res) => {
 		const password = req.body.password;
 
 		const status = await User.checkPassword(username, password);
-		const token = jwt.sign({ data: username }, "SuperSecretPassword@1010");
+		const response = await User.checkRole(username);
+		const { role } = response[0];
+		const token = jwt.sign({ data: { username: username, role: role } }, "secret");
 		res.cookie("token", token);
 		res.json(status);
 	} catch (err) {
-		res.status(400).json("Oh ohh! Wrong password");
+		res.status(400).json("Something wrong with login ", err);
 	}
 });
 

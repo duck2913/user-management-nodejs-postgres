@@ -1,4 +1,4 @@
-const db = require("./database");
+const db = require("../utils/database");
 
 class User {
 	static getAllUsers() {
@@ -28,18 +28,13 @@ class User {
 			throw new Error("Username already exist!");
 		}
 	}
+
 	static deleteAllRows() {
-		return db.any("truncate table");
+		return db.any("truncate table users");
 	}
 
 	static async findUser(username) {
-		const result = await db.oneOrNone(
-			"select username from users where username = $1",
-			username,
-		);
-
-		console.log("🚀 -> file: Users.js -> line 29 -> result", result);
-
+		const result = await db.oneOrNone("select * from users where username = $1", username);
 		return result;
 	}
 
@@ -66,6 +61,10 @@ class User {
 
 	static deleteUser(username) {
 		return db.none("delete from users where username = $1", username);
+	}
+
+	static checkRole(username) {
+		return db.any("select role from users where username = $1", username);
 	}
 }
 
